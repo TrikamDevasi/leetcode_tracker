@@ -1,0 +1,39 @@
+// Last updated: 30/07/2026, 10:24:56
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            // If target is found, return its index
+            if (nums[mid] == target) {
+                return mid;
+            }
+            
+            // Check if the left half is sorted
+            if (nums[left] <= nums[mid]) {
+                // Check if the target lies within the sorted left half
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1; // Search left
+                } else {
+                    left = mid + 1;  // Search right
+                }
+            } 
+            // Otherwise, the right half must be sorted
+            else {
+                // Check if the target lies within the sorted right half
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;  // Search right
+                } else {
+                    right = mid - 1; // Search left
+                }
+            }
+        }
+        
+        // Target not found
+        return -1;
+    }
+};
