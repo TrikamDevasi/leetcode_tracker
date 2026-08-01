@@ -1,25 +1,33 @@
-// Last updated: 01/08/2026, 21:36:47
+// Last updated: 01/08/2026, 21:43:53
 1class Solution {
 2public:
-3    void nextPermutation(vector<int>& nums) {
-4        int n = nums.size();
-5        int i = n - 2;
-6
-7        // Step 1: Find the first decreasing element from the right
-8        while (i >= 0 && nums[i] >= nums[i + 1]) {
-9            i--;
+3    vector<vector<int>> ans;
+4    vector<int> temp;
+5
+6    void solve(int idx, vector<int>& candidates, int target) {
+7        if (target == 0) {
+8            ans.push_back(temp);
+9            return;
 10        }
 11
-12        // Step 2: If breakpoint found, find the element just larger than nums[i] and swap
-13        if (i >= 0) {
-14            int j = n - 1;
-15            while (nums[j] <= nums[i]) {
-16                j--;
-17            }
-18            swap(nums[i], nums[j]);
-19        }
+12        for (int i = idx; i < candidates.size(); i++) {
+13            // Skip duplicates
+14            if (i > idx && candidates[i] == candidates[i - 1])
+15                continue;
+16
+17            // No need to continue if current number is larger
+18            if (candidates[i] > target)
+19                break;
 20
-21        // Step 3: Reverse the sequence from i + 1 to the end
-22        reverse(nums.begin() + i + 1, nums.end());
-23    }
-24};
+21            temp.push_back(candidates[i]);
+22            solve(i + 1, candidates, target - candidates[i]); // use next index
+23            temp.pop_back();
+24        }
+25    }
+26
+27    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+28        sort(candidates.begin(), candidates.end());
+29        solve(0, candidates, target);
+30        return ans;
+31    }
+32};
