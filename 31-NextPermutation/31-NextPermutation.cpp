@@ -1,33 +1,29 @@
-// Last updated: 01/08/2026, 21:43:53
+// Last updated: 01/08/2026, 21:48:06
 1class Solution {
 2public:
-3    vector<vector<int>> ans;
-4    vector<int> temp;
-5
-6    void solve(int idx, vector<int>& candidates, int target) {
-7        if (target == 0) {
-8            ans.push_back(temp);
-9            return;
-10        }
-11
-12        for (int i = idx; i < candidates.size(); i++) {
-13            // Skip duplicates
-14            if (i > idx && candidates[i] == candidates[i - 1])
-15                continue;
-16
-17            // No need to continue if current number is larger
-18            if (candidates[i] > target)
-19                break;
-20
-21            temp.push_back(candidates[i]);
-22            solve(i + 1, candidates, target - candidates[i]); // use next index
-23            temp.pop_back();
+3    string multiply(string num1, string num2) {
+4        if (num1 == "0" || num2 == "0")
+5            return "0";
+6
+7        int n = num1.size(), m = num2.size();
+8        vector<int> result(n + m, 0);
+9
+10        for (int i = n - 1; i >= 0; i--) {
+11            for (int j = m - 1; j >= 0; j--) {
+12                int mul = (num1[i] - '0') * (num2[j] - '0');
+13                int sum = mul + result[i + j + 1];
+14
+15                result[i + j + 1] = sum % 10;
+16                result[i + j] += sum / 10;
+17            }
+18        }
+19
+20        string ans = "";
+21        for (int num : result) {
+22            if (!(ans.empty() && num == 0))
+23                ans += (num + '0');
 24        }
-25    }
-26
-27    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-28        sort(candidates.begin(), candidates.end());
-29        solve(0, candidates, target);
-30        return ans;
-31    }
-32};
+25
+26        return ans.empty() ? "0" : ans;
+27    }
+28};
